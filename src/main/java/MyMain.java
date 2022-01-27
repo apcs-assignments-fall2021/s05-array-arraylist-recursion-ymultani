@@ -51,8 +51,13 @@ public class MyMain {
 
     // Tail Recursive Method:
     public static int sumTR(int[] arr, int i, int sum) {
-        // YOUR CODE HERE
-        return -1;
+        if(i == arr.length){
+            return sum;
+        }
+        else{
+            sum += arr[i];
+            return sumTR(arr,i+1,sum);
+        }
     }
 
 
@@ -69,14 +74,22 @@ public class MyMain {
 
     // Wrapper Method (Provided for you):
     public static boolean search(ArrayList<Integer> list, int x) {
-        // YOUR CODE HERE
-        return false;
+        return searchTR(list,x,0);
+
     }
 
     // Tail Recursive Method:
     public static boolean searchTR(ArrayList<Integer> list, int x, int i) {
-        // YOUR CODE HERE
-        return false;
+        if(i == list.size()){
+            return false;
+        }
+        if(list.get(i) == x){
+            return true;
+        }
+        else{
+            i++;
+            return searchTR(list,x, i);
+        }
     }
 
 
@@ -89,39 +102,51 @@ public class MyMain {
 
     // Wrapper Method (Provided for you):
     public static boolean allEven(int[] arr) {
-        // YOUR CODE HERE
-        return false;
+        return allEvenTR(arr,0);
     }
 
     // Tail Recursive Method:
     // You should write this yourself!
+    public static boolean allEvenTR(int[] arr,int i){
+        if(i == arr.length){
+            return true;
+        }
+        if(arr[i] % 2 != 0){
+            return false;
+        }
+        else{
+            i++;
+            return allEvenTR(arr, i);
+        }
+    }
 
 
     // ********************
     // Examples From Class:
     // ********************
-    public static void floodFill(char[][] mat, int row, int col) {
-        // Check out of bounds, return
+    public static boolean floodFill(char[][] mat, int row, int col) {
         if (row < 0 || col < 0 || row >= mat.length || col >= mat[0].length){
-            return;
+            return false;
         }
-        // If we're at wall, don't do anything
         else if (mat[row][col] == 'w') {
-            return;
+            return false;
         }
-        // If we've already visited there, let's return early
         else if (mat[row][col] == '*') {
-            return;
+            return false;
         }
-        else {
-            // Leave "breadcrumbs"
+
+        else if (mat[row][col] == 'f'){
+            return true;
+        }
+        else{
             mat[row][col] = '*';
 
-            // Visit our neighbors (left, up, right, down)
-            floodFill(mat, row, col-1);
-            floodFill(mat, row-1, col);
-            floodFill(mat, row, col+1);
-            floodFill(mat, row+1, col);
+            boolean up = escape(mat, row, col-1);
+            boolean left = escape(mat, row-1, col);
+            boolean down = escape(mat, row, col+1);
+            boolean right = escape(mat, row+1, col);
+
+            return (up || left || down || right);
         }
     }
 
@@ -136,11 +161,27 @@ public class MyMain {
 
     // Wrapper method
     public static boolean hasCountCopies(int[] arr, int x, int count) {
-        // YOUR CODE HERE
-        return false;
+        return hasCountCopiesTR(arr,x,count, 0,0);
     }
 
     // You may want a tail recursive method
+    public static boolean hasCountCopiesTR(int[]arr, int x, int count, int i, int index){
+        if(i == arr.length){
+            if(index == count){
+                return true;
+            }
+            return false;
+        }
+        if(arr[i] == x){
+            index++;
+            i++;
+            return hasCountCopiesTR(arr,x,count, i, index);
+        }
+        else{
+            i++;
+            return hasCountCopiesTR(arr,x,count,i,index);
+        }
+    }
 
 
     // This recursive method checks if the array is sorted in
@@ -148,11 +189,23 @@ public class MyMain {
 
     // Wrapper method
     public static boolean isSorted(ArrayList<Integer> list) {
-        // YOUR CODE HERE
-        return false;
+        return isSortedTR(list, 1);
     }
 
     // You may want a tail recursive method
+    public static boolean isSortedTR(ArrayList<Integer> list, int i){
+        if(i == list.size()){
+            return true;
+        }
+        if(list.get(i) >= list.get(i-1)){
+            i++;
+            return isSortedTR(list,i);
+        }
+        return false;
+
+
+
+    }
 
 
 
@@ -183,8 +236,7 @@ public class MyMain {
 
     // No tail recursion necessary!
     public static boolean escape(char[][] mat, int row, int col) {
-        // YOUR CODE HERE
-        return false;
+        return  floodFill(mat,row,col);
     }
 
 
